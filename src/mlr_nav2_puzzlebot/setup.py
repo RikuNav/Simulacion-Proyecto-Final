@@ -13,8 +13,8 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='paolo',
-    maintainer_email='paolo.alfonso.reyes@gmail.com',
+    maintainer='Paolo Reyes | Ricardo Navarro | Fernando Matute | Alain Vicencio',
+    maintainer_email='paolo.alfonso.reyes@gmail.com | ricardo.navgom@gmail.com | ferjosums@gmail.com | alvaofic@gmail.com',
     description='Puzzlebot navigation using nav2',
     license='MIT',
     entry_points={
