@@ -4,7 +4,10 @@
   <name>mlr_nav2_puzzlebot</name>
   <version>0.0.0</version>
   <description>Puzzlebot navigation using nav2</description>
-  <maintainer email="paolo.alfonso.reyes@gmail.com">paolo</maintainer>
+  <maintainer email="paolo.alfonso.reyes@gmail.com">Paolo</maintainer>
+  <maintainer email ="ricardo.navgom@gmail.com">Ricardo</maintainer>
+  <maintainer email = "ferjosums@gmail.com">Fernando</maintainer>
+  <maintainer email = "alvaofic@gmail.com">Alain</maintainer>
   <license>MIT</license>
 
   <depend>rclpy</depend>
