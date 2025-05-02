@@ -19,6 +19,7 @@ setup(
         (os.path.join('share', package_name, 'meshes'), glob(os.path.join('meshes', '*.stl'))),
         (os.path.join('share', package_name, 'urdf'), glob(os.path.join('urdf', '*.urdf'))),
         (os.path.join('share', package_name, 'rviz'), glob(os.path.join('rviz', '*.rviz'))),
+        ('share/' + package_name + '/rviz_config', ['rviz_config/nav.rviz']),
     ],
     install_requires=['setuptools'],
     zip_safe=True,

@@ -66,7 +66,7 @@ def generate_launch_description():
     # Declare argument
     declare_rviz_arg = DeclareLaunchArgument(
         'rviz_config_file',
-        default_value='map.rviz',
+        default_value='nav.rviz',
         description='RViz config file name to load'
     )
 
@@ -75,7 +75,7 @@ def generate_launch_description():
     rviz_config_path = PathJoinSubstitution([
         FindPackageShare('mlr_nav2_puzzlebot'),
         'rviz_config',
-        rviz_config_file
+        LaunchConfiguration('rviz_config_file')
     ])
 
     rviz_node = Node(
@@ -90,7 +90,9 @@ def generate_launch_description():
                             gz_service_spawn_puzzlebot,
                             robot_state_publisher_node,
                             world_node,
-                            joint_state_publisher_node
+                            joint_state_publisher_node,
+                            declare_rviz_arg,
+                            rviz_node,
                             ])
 
     return l_d
