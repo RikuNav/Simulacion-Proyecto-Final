@@ -13,6 +13,37 @@ def generate_launch_description():
     # Get the path to the node resources
     world_path = os.path.join(package_share_dir, 'worlds', 'puzzlebot_world.world')
 
+    # Robot Description
+    robot_file = 'puzzlebot.urdf'
+    urdf = os.path.join(
+        package_share_dir, 
+        'urdf', 
+        robot_file
+    )
+
+    with open(urdf, 'r') as infp:
+        robot_description = infp.read()
+
+    robot_state_publisher_node = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        name='robot_state_publisher',
+        output='screen',
+        parameters=[{
+            'robot_description': robot_description,
+        }],
+        arguments=[urdf],
+    )
+
+    world_node = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        arguments= [
+            '--x', '0.0', '--y', '0.0', '--z', '0.0',
+            '--roll', '0.0', '--pitch', '0.0', '--yaw', '0.0',
+            '--frame-id', 'map', '--child-frame-id', 'odom']
+    )
+
     # Nodes definition
     gz_process = ExecuteProcess(cmd=['gz', 'sim', world_path],
                                 output='screen',)
@@ -24,8 +55,18 @@ def generate_launch_description():
                                                                         '--req', f'sdf_filename: "file://{package_share_dir}/models/puzzlebot.sdf" name: "puzzlebot"'],
                                 output='screen',)
     
+    joint_state_publisher_node = Node(
+        package='mlr_nav2_puzzlebot',
+        executable='movement',
+        output='screen',
+    )
+
     l_d = LaunchDescription([gz_process,
-                            gz_service_spawn_puzzlebot])
+                            gz_service_spawn_puzzlebot,
+                            robot_state_publisher_node,
+                            world_node,
+                            joint_state_publisher_node
+                            ])
 
     return l_d
 
