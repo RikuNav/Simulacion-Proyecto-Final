@@ -2,8 +2,10 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import ExecuteProcess
+from launch.actions import ExecuteProcess, DeclareLaunchArgument
 from launch_ros.actions import Node
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
@@ -60,7 +62,30 @@ def generate_launch_description():
         executable='movement',
         output='screen',
     )
+    
+    # Declare argument
+    declare_rviz_arg = DeclareLaunchArgument(
+        'rviz_config_file',
+        default_value='map.rviz',
+        description='RViz config file name to load'
+    )
 
+    # Define the RViz node with LaunchConfiguration directly for the file path
+    rviz_config_file = LaunchConfiguration('rviz_config_file')
+    rviz_config_path = PathJoinSubstitution([
+        FindPackageShare('mlr_nav2_puzzlebot'),
+        'rviz_config',
+        rviz_config_file
+    ])
+
+    rviz_node = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        output='screen',
+        arguments=['-d', rviz_config_path]
+    )
+    
     l_d = LaunchDescription([gz_process,
                             gz_service_spawn_puzzlebot,
                             robot_state_publisher_node,
