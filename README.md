@@ -33,7 +33,7 @@ To aid visualization, two RVIZ profiles were included:
 
 ### RVIZ Configuration for Mapping:
 ```
-ros2 launch NombreDelEquipo_nav2_puzzlebot mapping.launch.py
+ros2 launch mlr_nav2_puzzlebot launch.py rviz_config_file:=map.rviz
 ```
 Add picture
 
