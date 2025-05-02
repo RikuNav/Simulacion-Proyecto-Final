@@ -49,11 +49,13 @@
                 <color rgba="1.0 1.0 1.0 0.4"/>
             </material>
         </visual>
+
         <collision>
             <geometry>
                 <mesh filename="package://mlr_nav2_puzzlebot/meshes/Puzzlebot_Wheel.stl"/>
             </geometry>
         </collision>
+
         <inertial>
             <mass value="0.2"/>
             <origin xyz="0 0 0" rpy="1.57 0 0"/>
@@ -74,11 +76,13 @@
                 <color rgba="1.0 1.0 1.0 0.4"/>
             </material>
         </visual>
+
         <collision>
             <geometry>
                 <mesh filename="package://mlr_nav2_puzzlebot/meshes/Puzzlebot_Wheel.stl"/>
             </geometry>
         </collision>
+
         <inertial>
             <mass value="0.2"/>
             <origin xyz="0 0 0" rpy="1.57 0 0"/>
@@ -99,11 +103,13 @@
                 <color rgba="0.6 0.6 0.6 0.4"/>
             </material>
         </visual>
+
         <collision>
             <geometry>
                 <mesh filename="package://mlr_nav2_puzzlebot/meshes/Puzzlebot_Caster_Wheel.stl"/>
             </geometry>
         </collision>
+        
         <inertial>
             <mass value="0.001"/>
             <origin xyz="0 0 0" rpy="0 0 0"/>
