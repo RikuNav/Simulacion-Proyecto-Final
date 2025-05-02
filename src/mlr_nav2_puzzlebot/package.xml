@@ -2,14 +2,18 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>mlr_nav2_puzzlebot</name>
-  <version>0.0.0</version>
+  <version>1.0.0</version>
   <description>Puzzlebot navigation using nav2</description>
-  <maintainer email="paolo.alfonso.reyes@gmail.com">paolo</maintainer>
+  <maintainer email="paolo.alfonso.reyes@gmail.com">Paolo Reyes</maintainer>
+  <maintainer email="ricardo.navgom@gmail.com">Ricardo Navarro</maintainer>
+  <maintainer email="ferjosums@gmail.com">Fernando Matute</maintainer>
+  <maintainer email="alvaofic@gmail.com">Alain Vicencio</maintainer>
   <license>MIT</license>
 
+  <depend>nav2</depend>
   <depend>rclpy</depend>
   <depend>ros2launch</depend>
-  <depend>nav2</depend>
+  <depend>ros_gz</depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
