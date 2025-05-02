@@ -15,6 +15,8 @@ setup(
         ('share/' + package_name, ['package.xml']),
         (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.py'))),
         (os.path.join('share', package_name, 'worlds'), glob(os.path.join('worlds', '*.world'))),
+        (os.path.join('share', package_name, 'models'), glob(os.path.join('models', '*.sdf'))),
+        (os.path.join('share', package_name, 'meshes'), glob(os.path.join('meshes', '*.stl'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
