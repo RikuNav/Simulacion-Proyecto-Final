@@ -16,8 +16,16 @@ def generate_launch_description():
     # Nodes definition
     gz_process = ExecuteProcess(cmd=['gz', 'sim', world_path],
                                 output='screen',)
+
+    gz_service_spawn_puzzlebot = ExecuteProcess(cmd=['gz', 'service', '-s', '/world/default/create', 
+                                                                        '--reqtype', 'gz.msgs.EntityFactory',
+                                                                        '--reptype', 'gz.msgs.Boolean',
+                                                                        '--timeout', '1000',
+                                                                        '--req', f'sdf_filename: "file://{package_share_dir}/models/puzzlebot.sdf" name: "puzzlebot"'],
+                                output='screen',)
     
-    l_d = LaunchDescription([gz_process,])
+    l_d = LaunchDescription([gz_process,
+                            gz_service_spawn_puzzlebot])
 
     return l_d
 
