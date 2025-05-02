@@ -14,7 +14,7 @@ def generate_launch_description():
     world_path = os.path.join(package_share_dir, 'worlds', 'puzzlebot_world.world')
 
     # Nodes definition
-    gz_process = ExecuteProcess(cmd=['gz', 'sim', '-r', world_path],
+    gz_process = ExecuteProcess(cmd=['gz', 'sim', world_path],
                                 output='screen',)
     
     l_d = LaunchDescription([gz_process,])
