@@ -96,7 +96,7 @@
       </link>
     </model>
     <model name='walls'>
-      <pose>2.00997 -3.43471 0 0 -0 0</pose>
+      <pose>0 0 0 0 -0 0</pose>
       <link name='Wall_0'>
         <collision name='Wall_0_Collision'>
           <geometry>
@@ -701,7 +701,7 @@
         </link>
       </model>
       <model name='walls'>
-        <pose>2.00997 -3.43471 0 0 -0 0</pose>
+        <pose>0 0 0 0 -0 0</pose>
         <scale>1 1 1</scale>
         <link name='Wall_0'>
           <pose>2.00997 -1.94471 0 0 -0 0</pose>
