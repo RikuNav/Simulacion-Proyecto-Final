@@ -176,5 +176,29 @@
     <frame name='base_link' attached_to='base_link_joint'>
       <pose>0 0 0 0 0 0</pose>
     </frame>
+
+    <plugin name="DiffDynamicPlugin" filename="libDiffDynamicPlugin.so">
+            <leftJoint>wheel_l_joint</leftJoint>
+            <rightJoint>wheel_r_joint</rightJoint>
+            <cmd_R_topic>ControlR</cmd_R_topic>
+            <cmd_L_topic>ControlL</cmd_L_topic>
+            <cmd_vel_topic>cmd_vel</cmd_vel_topic>
+            <enc_R_topic>VelocityEncR</enc_R_topic>
+            <enc_L_topic>VelocityEncL</enc_L_topic>
+            <mot_Vmax>5</mot_Vmax>
+            <mot_J>0.0005</mot_J>
+            <mot_R>2</mot_R>
+            <mot_L>0.01</mot_L>
+            <mot_K>0.01</mot_K>
+            <mot_b>0.00001</mot_b>
+            <mot_gear>34</mot_gear>
+            <robot_width>0.09</robot_width>
+            <wheel_radius>0.05</wheel_radius>
+            <pid_Kp>0.1</pid_Kp>
+            <pid_Ti>0.05</pid_Ti>
+            <pid_Td>0</pid_Td>
+            <input_type>3</input_type>
+            <rate>100</rate>
+        </plugin>
   </model>
 </sdf>

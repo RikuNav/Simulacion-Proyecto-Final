@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Puzzlebot">
+    <xacro:arg name="prefix" default=""/>
+    <xacro:arg name="lidar_frame" default=""/>
+    <xacro:arg name="camera_frame" default=""/>
+
+    <!-- files for gazebo costumization -->
+    <xacro:include filename="$(find mlr_nav2_puzzlebot)/urdf/parameters_jetson_lidar.xacro" />
+    <xacro:include filename="$(find mlr_nav2_puzzlebot)/urdf/materials.xacro" />
+    <xacro:include filename="$(find mlr_nav2_puzzlebot)/urdf/macros.xacro" />
+    <xacro:include filename="$(find mlr_nav2_puzzlebot)/urdf/puzzlebot_jetson_lidar_base.urdf.xacro"/>
+
+    <xacro:include filename="$(find mlr_nav2_puzzlebot)/urdf/laser_camera_bracket.xacro" />
+    <xacro:include filename="$(find mlr_nav2_puzzlebot)/urdf/lidar.xacro" />
+    <xacro:include filename="$(find mlr_nav2_puzzlebot)/urdf/gazebo_control.xacro" />
+
+    <!--LINKS-->
+    <xacro:puzzlebot_jetson_lidar_base prefix="$(arg prefix)"/>
+    <xacro:laser_camera_sensor prefix="$(arg prefix)" camera_frame="$(arg camera_frame)" tof_frame="$(arg tof_frame)"/>
+    <xacro:rpi_lidar_sensor prefix="$(arg prefix)"  lidar_frame="$(arg lidar_frame)" />
+    <xacro:puzzlebot_control prefix="$(arg prefix)"/>
+</robot>
