@@ -1,0 +1,180 @@
+<sdf version='1.10'>
+  <model name='puzzlebot'>
+    <link name='base_footprint'>
+      <inertial>
+        <pose>-4.7240179015415232e-05 0 0.049736449527598217 0 0 0</pose>
+        <mass>2.0110000000000001</mass>
+        <inertia>
+          <ixx>0.088426760318249642</ixx>
+          <ixy>0</ixy>
+          <ixz>-2.8249627051218311e-06</ixz>
+          <iyy>0.032135780830432621</iyy>
+          <iyz>0</iyz>
+          <izz>0.107110020512183</izz>
+        </inertia>
+      </inertial>
+      <collision name='base_footprint_fixed_joint_lump__base_link_collision'>
+        <pose>0 0 0.050000000000000003 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://mlr_nav2_puzzlebot/meshes/Puzzlebot_Jetson_Lidar_Edition_Base.stl</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <collision name='base_footprint_fixed_joint_lump__caster_collision_1'>
+        <pose>-0.095000000000000001 0 0.02 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://mlr_nav2_puzzlebot/meshes/Puzzlebot_Caster_Wheel.stl</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='base_footprint_fixed_joint_lump__base_link_visual'>
+        <pose>0 0 0.047500000000000001 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://mlr_nav2_puzzlebot/meshes/Puzzlebot_Jetson_Lidar_Edition_Base.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1 1 1 1</diffuse>
+          <ambient>1 1 1 1</ambient>
+        </material>
+      </visual>
+      <visual name='base_footprint_fixed_joint_lump__caster_visual_1'>
+        <pose>-0.095000000000000001 0 0.004500000000000004 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://mlr_nav2_puzzlebot/meshes/Puzzlebot_Caster_Wheel.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.75000006 0.75000006 0.75000006 1</diffuse>
+          <ambient>0.75000006 0.75000006 0.75000006 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name='wheel_l_joint' type='revolute'>
+      <pose relative_to='base_footprint'>0.051999999999999998 0.095000000000000001 0.047500000000000001 0 0 0</pose>
+      <parent>base_footprint</parent>
+      <child>wheel_l</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-inf</lower>
+          <upper>inf</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='wheel_l'>
+      <pose relative_to='wheel_l_joint'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0 1.5700000000000001 0 0</pose>
+        <mass>0.20000000000000001</mass>
+        <inertia>
+          <ixx>0.00069999999999999999</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.00069999999999999999</iyy>
+          <iyz>0</iyz>
+          <izz>4.0000000000000003e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name='wheel_l_collision'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://mlr_nav2_puzzlebot/meshes/Puzzlebot_Wheel.stl</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='wheel_l_visual'>
+        <pose>0 0 0 1.5700000000000001 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://mlr_nav2_puzzlebot/meshes/Puzzlebot_Wheel.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1 1 1 1</diffuse>
+          <ambient>1 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name='wheel_r_joint' type='revolute'>
+      <pose relative_to='base_footprint'>0.051999999999999998 -0.095000000000000001 0.047500000000000001 0 0 0</pose>
+      <parent>base_footprint</parent>
+      <child>wheel_r</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-inf</lower>
+          <upper>inf</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='wheel_r'>
+      <pose relative_to='wheel_r_joint'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0 1.5700000000000001 0 0</pose>
+        <mass>0.20000000000000001</mass>
+        <inertia>
+          <ixx>0.00069999999999999999</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.00069999999999999999</iyy>
+          <iyz>0</iyz>
+          <izz>4.0000000000000003e-05</izz>
+        </inertia>
+      </inertial>
+      <collision name='wheel_r_collision'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://mlr_nav2_puzzlebot/meshes/Puzzlebot_Wheel.stl</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='wheel_r_visual'>
+        <pose>0 0 0 1.5700000000000001 4.3368086899420177e-19 3.1400000000000001</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://mlr_nav2_puzzlebot/meshes/Puzzlebot_Wheel.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1 1 1 1</diffuse>
+          <ambient>1 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <frame name='caster_joint' attached_to='base_link'>
+      <pose>-0.095000000000000001 0 -0.029999999999999999 0 0 0</pose>
+    </frame>
+    <frame name='caster' attached_to='caster_joint'>
+      <pose>0 0 0 0 0 0</pose>
+    </frame>
+    <frame name='base_link_joint' attached_to='base_footprint'>
+      <pose>0 0 0.050000000000000003 0 0 0</pose>
+    </frame>
+    <frame name='base_link' attached_to='base_link_joint'>
+      <pose>0 0 0 0 0 0</pose>
+    </frame>
+  </model>
+</sdf>
