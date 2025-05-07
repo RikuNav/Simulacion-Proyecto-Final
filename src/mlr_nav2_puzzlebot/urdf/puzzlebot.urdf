@@ -19,7 +19,7 @@
                 <mesh filename="package://mlr_nav2_puzzlebot/meshes/Puzzlebot_Jetson_Lidar_Edition_Base.stl"/>
             </geometry>
             <material name="base_color">
-                <color rgba="1.0 1.0 1.0 0.4"/>
+                <color rgba="1.0 1.0 1.0 1.0"/>
             </material>
         </visual>
 
@@ -46,7 +46,7 @@
                 <mesh filename="package://mlr_nav2_puzzlebot/meshes/Puzzlebot_Wheel.stl"/>
             </geometry>
             <material name="wheel_color">
-                <color rgba="1.0 1.0 1.0 0.4"/>
+                <color rgba="1.0 1.0 1.0 1.0"/>
             </material>
         </visual>
 
@@ -73,7 +73,7 @@
                 <mesh filename="package://mlr_nav2_puzzlebot/meshes/Puzzlebot_Wheel.stl"/>
             </geometry>
             <material name="wheel_color">
-                <color rgba="1.0 1.0 1.0 0.4"/>
+                <color rgba="1.0 1.0 1.0 1.0"/>
             </material>
         </visual>
 
@@ -100,7 +100,7 @@
                 <mesh filename="package://mlr_nav2_puzzlebot/meshes/Puzzlebot_Caster_Wheel.stl"/>
             </geometry>
             <material name="caster_color">
-                <color rgba="0.6 0.6 0.6 0.4"/>
+                <color rgba="0.6 0.6 0.6 1.0"/>
             </material>
         </visual>
 

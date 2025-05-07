@@ -1,4 +1,4 @@
-<sdf version='1.11'>
+<sdf version='1.10'>
   <model name='puzzlebot'>
     <link name='base_footprint'>
       <inertial>
