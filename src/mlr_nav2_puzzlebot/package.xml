@@ -8,12 +8,19 @@
   <maintainer email="ricardo.navgom@gmail.com">Ricardo Navarro</maintainer>
   <maintainer email="ferjosums@gmail.com">Fernando Matute</maintainer>
   <maintainer email="alvaofic@gmail.com">Alain Vicencio</maintainer>
-  <license>MIT</license>
+  <license>Apache-2.0</license>
 
-  <depend>nav2</depend>
-  <depend>rclpy</depend>
+
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
   <depend>ros2launch</depend>
-  <depend>ros_gz</depend>
+  <depend>tf2_ros_py</depend>
+  <depend>python3-numpy</depend>
+  <depend>python3-transforms3d</depend>
+  <depend>rclpy</depend>
+  <depend>robot_state_publisher</depend>
+  <depend>joint_state_publisher_gui</depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
