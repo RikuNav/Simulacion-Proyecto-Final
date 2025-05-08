@@ -2,8 +2,10 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import ExecuteProcess, SetEnvironmentVariable, DeclareLaunchArgument
-from launch.substitutions import Command, LaunchConfiguration
+from launch.actions import ExecuteProcess, SetEnvironmentVariable, DeclareLaunchArgument, IncludeLaunchDescription
+from launch.conditions import IfCondition, UnlessCondition
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import Command, LaunchConfiguration, PythonExpression
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
 
@@ -14,17 +16,20 @@ def generate_launch_description():
     pos_x = '0.0'
     pos_y = '0.0'
     pos_th = '0.0'
+    op_mode = 'map'
 
     # Launch arguments
     declare_sim_time_arg = DeclareLaunchArgument('use_sim_time', default_value=sim_time, description='Use simulated time')
     declare_x_arg = DeclareLaunchArgument('x', default_value=pos_x, description='X position of the robot')
     declare_y_arg = DeclareLaunchArgument('y', default_value=pos_y, description='Y position of the robot')
     declare_theta_arg = DeclareLaunchArgument('theta', default_value=pos_th, description='angle of the robot')
-    
+    declare_mode_arg = DeclareLaunchArgument('mode', default_value=op_mode, description='Mode of operation (map or nav)')
+
     use_sim_time = LaunchConfiguration('use_sim_time')
     x = LaunchConfiguration('x')
     y = LaunchConfiguration('y')
     theta = LaunchConfiguration('theta')
+    mode = LaunchConfiguration('mode')
 
     # Get the package share directory
     package_share_dir = get_package_share_directory('mlr_nav2_puzzlebot')
@@ -88,6 +93,32 @@ def generate_launch_description():
                         parameters=[{'config_file': ros_gz_bridge_config_file_path,}],
                         output='screen')
     
+    # Include the navigation stack and SLAM tool
+    # This will only be activated when the mode is set to "map"
+    navigation_stack_node = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(get_package_share_directory('nav2_bringup'), 'launch', 'navigation_launch.py')
+        ),
+        launch_arguments={
+            'use_sim_time': use_sim_time
+        }.items(),
+        condition=UnlessCondition([
+            PythonExpression([mode, '==', '"map"'])
+        ])
+    )
+
+    slam_tool_node = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(get_package_share_directory('slam_toolbox'), 'launch', 'online_async_launch.py')
+        ),
+        launch_arguments={
+            'use_sim_time': use_sim_time
+        }.items(),
+        condition=UnlessCondition([
+            PythonExpression([mode, '==', '"map"'])
+        ])
+    )
+
     # # Declare argument
     # declare_rviz_arg = DeclareLaunchArgument(
     #     'rviz_config_file',
@@ -115,13 +146,16 @@ def generate_launch_description():
                             declare_x_arg,
                             declare_y_arg,
                             declare_theta_arg,
+                            declare_mode_arg,
                             set_gazebo_resources,
                             set_gazebo_plugins,
                             map_odom_transform_node,
                             robot_state_publisher_node,
                             gz_process,
                             gz_spawn_puzzlebot_node,
-                            gz_bridge_node])
+                            gz_bridge_node,
+                            navigation_stack_node,
+                            slam_tool_node,])
 
     return l_d
 
