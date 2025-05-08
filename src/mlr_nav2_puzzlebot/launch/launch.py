@@ -42,6 +42,14 @@ def generate_launch_description():
                                 ' tof_frame:=', 'tof_frame'])
 
     # Nodes definition
+    map_odom_transform_node = Node(name='map_odom_transform',
+                                    package='tf2_ros',
+                                    executable='static_transform_publisher',
+                                    output='screen',
+                                    arguments=['--x', '1', '--y', '1', '--z', '0', 
+                                                '--yaw', '0', '--pitch', '0', '--roll', '0', 
+                                                '--frame-id', 'map', '--child-frame-id', 'odom'],)
+    
     robot_state_publisher_node = Node(package="robot_state_publisher",
                                         executable="robot_state_publisher",
                                         output="screen",
@@ -53,14 +61,14 @@ def generate_launch_description():
     gz_process = ExecuteProcess(cmd=['gz', 'sim', world_path, '-v', '4'],
                                 output='screen',)
     
-    gz_spawn_puzzlebot = Node(package="ros_gz_sim",
-                            executable="create",
-                            arguments=[
-                                "-name", "puzzlebot",
-                                "-topic", "robot_description",
-                                "-x", x, "-y", y, "-Y", theta,
-                            ],
-                            output="screen",)
+    gz_spawn_puzzlebot_node = Node(package="ros_gz_sim",
+                                    executable="create",
+                                    arguments=[
+                                        "-name", "puzzlebot",
+                                        "-topic", "robot_description",
+                                        "-x", x, "-y", y, "-Y", theta,
+                                    ],
+                                    output="screen",)
 
     # Set Gazebo environment variables
     set_gazebo_resources = SetEnvironmentVariable(
@@ -109,9 +117,10 @@ def generate_launch_description():
                             declare_theta_arg,
                             set_gazebo_resources,
                             set_gazebo_plugins,
+                            map_odom_transform_node,
                             robot_state_publisher_node,
                             gz_process,
-                            gz_spawn_puzzlebot,
+                            gz_spawn_puzzlebot_node,
                             gz_bridge_node])
 
     return l_d

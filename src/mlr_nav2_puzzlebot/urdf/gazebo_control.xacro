@@ -4,7 +4,6 @@
 
 <xacro:macro name="puzzlebot_control" params="prefix">
     <gazebo>
-
         <plugin name="DiffDynamicPlugin" filename="libDiffDynamicPlugin.so">
                 <leftJoint>${prefix}wheel_left_joint</leftJoint>
                 <rightJoint>${prefix}wheel_right_joint</rightJoint>
@@ -29,23 +28,6 @@
                 <input_type>1</input_type>
                 <rate>100</rate>
         </plugin>
-
-
-        <!--<plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
-            <odom_publisher_frequency>50</odom_publisher_frequency>
-            <left_joint>${prefix}wheel_left_joint</left_joint>
-            <right_joint>${prefix}wheel_right_joint</right_joint>
-            <wheel_separation>0.18</wheel_separation>
-            <wheel_radius>0.05</wheel_radius>
-            <topic>${prefix}cmd_vel</topic>
-            <tf_topic>diff_drive/tf</tf_topic>
-            <odom_topic>${prefix}odom</odom_topic>
-            <frame_id>${prefix}odom</frame_id>
-            <child_frame_id>${prefix}base_footprint</child_frame_id>
-            <max_angular_acceleration>1.8</max_angular_acceleration>
-            <max_angular_velocity>13.0</max_angular_velocity>
-        </plugin>-->
-    
         
         <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
             <topic>${prefix}joint_states</topic>
@@ -54,24 +36,14 @@
             <joint_name>${prefix}wheel_left_joint</joint_name>
         </plugin>
 
-        <!--THIS PLUGIN MUST BE USED INSIDE WORLDS TAG-->
-        <!--<plugin
-                filename="gz-sim-sensors-system"
-                name="gz::sim::systems::Sensors">
-                <render_engine>ogre2</render_engine>
-        </plugin>-->
-
         <plugin filename="gz-sim-odometry-publisher-system" name="gz::sim::systems::OdometryPublisher">
-        <odom_frame>world</odom_frame>
+        <odom_frame>odom</odom_frame>
         <robot_base_frame>${prefix}base_footprint</robot_base_frame>
         <odom_publish_frequency>50</odom_publish_frequency>
         <odom_topic>${prefix}ground_truth</odom_topic>
         <tf_topic>tf</tf_topic>
         <dimensions>2</dimensions>
         </plugin>
-
     </gazebo>
-
 </xacro:macro>
-
 </robot>
