@@ -58,7 +58,7 @@
     range_resolution:='0.017'
     topic_name:='scan'
     always_on:='true'
-    visualize:='false'
+    visualize:='true'
     ">
 
     <link name="${prefix}lidar_base_link">

@@ -39,7 +39,18 @@ def generate_launch_description():
     robot_description = Command(['xacro ', str(robot_path),
                                 ' camera_frame:=', 'camera_link_optical',
                                 ' lidar_frame:=', 'laser_frame',
-                                ' tof_frame:=', 'tof_frame'])
+                                ' tof_frame:=', 'tof_link'])
+    
+    # Set Gazebo environment variables
+    set_gazebo_resources = SetEnvironmentVariable(
+        name='GZ_SIM_RESOURCE_PATH',
+        value=os.path.dirname(package_share_dir)
+    )
+
+    set_gazebo_plugins = SetEnvironmentVariable(
+        name='GZ_SIM_SYSTEM_PLUGIN_PATH',
+        value=os.path.join(package_share_dir, 'plugins')
+    )
 
     # Nodes definition
     map_odom_transform_node = Node(name='map_odom_transform',
@@ -69,17 +80,6 @@ def generate_launch_description():
                                         "-x", x, "-y", y, "-Y", theta,
                                     ],
                                     output="screen",)
-
-    # Set Gazebo environment variables
-    set_gazebo_resources = SetEnvironmentVariable(
-        name='GZ_SIM_RESOURCE_PATH',
-        value=os.path.dirname(package_share_dir)
-    )
-
-    set_gazebo_plugins = SetEnvironmentVariable(
-        name='GZ_SIM_SYSTEM_PLUGIN_PATH',
-        value=os.path.join(package_share_dir, 'plugins')
-    )
 
     # Bridge ROS topics and Gazebo messages for establishing communication
     ros_gz_bridge_config_file_path = os.path.join(package_share_dir, 'config', f"puzzlebot_bridge.yaml")

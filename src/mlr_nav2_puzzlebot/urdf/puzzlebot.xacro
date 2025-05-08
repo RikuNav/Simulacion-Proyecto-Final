@@ -3,6 +3,7 @@
     <xacro:arg name="prefix" default=""/>
     <xacro:arg name="lidar_frame" default=""/>
     <xacro:arg name="camera_frame" default=""/>
+    <xacro:arg name="tof_frame" default=""/>
 
     <!-- files for gazebo costumization -->
     <xacro:include filename="$(find mlr_nav2_puzzlebot)/urdf/parameters_jetson_lidar.xacro" />
