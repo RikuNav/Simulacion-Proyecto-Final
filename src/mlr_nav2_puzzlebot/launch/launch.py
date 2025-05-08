@@ -3,7 +3,7 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import ExecuteProcess, SetEnvironmentVariable, DeclareLaunchArgument, IncludeLaunchDescription
-from launch.conditions import IfCondition, UnlessCondition
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, LaunchConfiguration, PythonExpression
 from launch_ros.actions import Node
@@ -24,12 +24,20 @@ def generate_launch_description():
     declare_y_arg = DeclareLaunchArgument('y', default_value=pos_y, description='Y position of the robot')
     declare_theta_arg = DeclareLaunchArgument('theta', default_value=pos_th, description='angle of the robot')
     declare_mode_arg = DeclareLaunchArgument('mode', default_value=op_mode, description='Mode of operation (map or nav)')
+    declare_map_dir = DeclareLaunchArgument('map', 
+                                    default_value=
+                                    os.path.join(
+                                        get_package_share_directory('mlr_nav2_puzzlebot'),
+                                        'maps',
+                                        'puzzlebot_map.yaml'),
+                                    description='Full path to map file to load')
 
     use_sim_time = LaunchConfiguration('use_sim_time')
     x = LaunchConfiguration('x')
     y = LaunchConfiguration('y')
     theta = LaunchConfiguration('theta')
     mode = LaunchConfiguration('mode')
+    map_directory = LaunchConfiguration('map')
 
     # Get the package share directory
     package_share_dir = get_package_share_directory('mlr_nav2_puzzlebot')
@@ -102,9 +110,7 @@ def generate_launch_description():
         launch_arguments={
             'use_sim_time': use_sim_time
         }.items(),
-        condition=UnlessCondition([
-            PythonExpression([mode, '==', '"map"'])
-        ])
+        condition=IfCondition(PythonExpression(['"', mode, '" == "map"']))
     )
 
     slam_tool_node = IncludeLaunchDescription(
@@ -114,9 +120,19 @@ def generate_launch_description():
         launch_arguments={
             'use_sim_time': use_sim_time
         }.items(),
-        condition=UnlessCondition([
-            PythonExpression([mode, '==', '"map"'])
-        ])
+        condition=IfCondition(PythonExpression(['"', mode, '" == "map"']))
+    )
+
+    # Include the navigation node
+    navigation_node = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(get_package_share_directory('nav2_bringup'), 'launch', 'bringup_launch.py')
+        ),
+        launch_arguments={
+            'map': map_directory,
+            'use_sim_time': use_sim_time,
+        }.items(),
+        condition=IfCondition(PythonExpression(['"', mode, '" == "nav"']))
     )
 
     # # Declare argument
@@ -147,6 +163,7 @@ def generate_launch_description():
                             declare_y_arg,
                             declare_theta_arg,
                             declare_mode_arg,
+                            declare_map_dir,
                             set_gazebo_resources,
                             set_gazebo_plugins,
                             map_odom_transform_node,
@@ -155,7 +172,8 @@ def generate_launch_description():
                             gz_spawn_puzzlebot_node,
                             gz_bridge_node,
                             navigation_stack_node,
-                            slam_tool_node,])
+                            slam_tool_node,
+                            navigation_node])
 
     return l_d
 
