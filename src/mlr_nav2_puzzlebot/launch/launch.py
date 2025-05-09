@@ -17,6 +17,7 @@ def generate_launch_description():
     pos_y = '0.0'
     pos_th = '0.0'
     op_mode = 'map'
+    param_file_name = 'nav2_config.yaml'
 
     # Launch arguments
     declare_sim_time_arg = DeclareLaunchArgument('use_sim_time', default_value=sim_time, description='Use simulated time')
@@ -31,6 +32,12 @@ def generate_launch_description():
                                         'maps',
                                         'puzzlebot_map.yaml'),
                                     description='Full path to map file to load')
+    declare_param_file_name = DeclareLaunchArgument('param_file_name',
+                                                    default_value=os.path.join(
+                                                        get_package_share_directory('mlr_nav2_puzzlebot'),
+                                                        'config',
+                                                        param_file_name),
+                                                    )
 
     use_sim_time = LaunchConfiguration('use_sim_time')
     x = LaunchConfiguration('x')
@@ -38,6 +45,7 @@ def generate_launch_description():
     theta = LaunchConfiguration('theta')
     mode = LaunchConfiguration('mode')
     map_directory = LaunchConfiguration('map')
+    param_dir = LaunchConfiguration('param_file_name')
 
     # Get the package share directory
     package_share_dir = get_package_share_directory('mlr_nav2_puzzlebot')
@@ -131,6 +139,7 @@ def generate_launch_description():
         launch_arguments={
             'map': map_directory,
             'use_sim_time': use_sim_time,
+            'params_file': param_dir,
         }.items(),
         condition=IfCondition(PythonExpression(['"', mode, '" == "nav"']))
     )
@@ -164,6 +173,7 @@ def generate_launch_description():
                             declare_theta_arg,
                             declare_mode_arg,
                             declare_map_dir,
+                            declare_param_file_name,
                             set_gazebo_resources,
                             set_gazebo_plugins,
                             map_odom_transform_node,
