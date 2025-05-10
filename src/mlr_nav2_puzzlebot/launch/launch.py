@@ -89,7 +89,7 @@ def generate_launch_description():
                                         }],)
 
     # Gz world and puzzlebot launch
-    gz_process = ExecuteProcess(cmd=['gz', 'sim', world_path],
+    gz_process = ExecuteProcess(cmd=['gz', 'sim', world_path, '-r'],
                                 output='screen',)
     
     gz_spawn_puzzlebot_node = Node(package="ros_gz_sim",
