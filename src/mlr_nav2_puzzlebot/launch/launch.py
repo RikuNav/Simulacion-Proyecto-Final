@@ -166,5 +166,3 @@ def generate_launch_description():
                             navigation_node])
 
     return l_d
-
-
