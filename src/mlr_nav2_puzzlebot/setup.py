@@ -22,6 +22,7 @@ setup(
         (os.path.join('share', package_name, 'config'), glob(os.path.join('config', '*.yaml'))),
         (os.path.join('share', package_name, 'maps'), glob(os.path.join('maps', '*.yaml'))),
         (os.path.join('share', package_name, 'maps'), glob(os.path.join('maps', '*.pgm'))),
+        (os.path.join('share', package_name, 'params'), glob(os.path.join('params', '*.yaml'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,

@@ -35,7 +35,7 @@ def generate_launch_description():
     declare_param_file_name = DeclareLaunchArgument('param_file_name',
                                                     default_value=os.path.join(
                                                         get_package_share_directory('mlr_nav2_puzzlebot'),
-                                                        'config',
+                                                        'params',
                                                         param_file_name),
                                                     )
 
