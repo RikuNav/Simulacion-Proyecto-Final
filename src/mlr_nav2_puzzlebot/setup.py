@@ -1,4 +1,5 @@
 import os
+
 from glob import glob
 from setuptools import find_packages, setup
 
@@ -32,8 +33,8 @@ setup(
     license='MIT',
     entry_points={
         'console_scripts': [
-            'movement = mlr_nav2_puzzlebot.movement:main',
-            'puzzlebot_gazebo = mlr_nav2_puzzlebot.puzzlebot_gazebo:main',
+            'puzzlebot_localization = mlr_nav2_puzzlebot.puzzlebot_localization:main',
+            'puzzlebot_joint_state_publisher = mlr_nav2_puzzlebot.puzzlebot_joint_state_publisher:main',
         ],
     },
 )
