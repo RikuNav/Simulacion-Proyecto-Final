@@ -3,7 +3,7 @@ import transforms3d as t3d
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import ExecuteProcess, SetEnvironmentVariable, DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import ExecuteProcess, SetEnvironmentVariable, DeclareLaunchArgument, IncludeLaunchDescription, OpaqueFunction
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, LaunchConfiguration, PythonExpression
@@ -52,6 +52,9 @@ def generate_launch_description():
     # Path for robot xacro
     robot_path = os.path.join(package_share_dir, 'urdf', robot_xacro_filename)
     
+    rviz_map = os.path.join(package_share_dir, 'rviz', 'map.rviz')
+    rviz_nav = os.path.join(package_share_dir, 'rviz', 'nav.rviz')
+
     # Robot description
     robot_description = Command(['xacro ', str(robot_path),
                                 ' camera_frame:=', 'camera_link_optical',
@@ -150,6 +153,22 @@ def generate_launch_description():
         }.items(),
         condition=IfCondition(PythonExpression(['"', mode, '" == "nav"']))
     )
+
+    rviz_node_map = Node(
+        package='rviz2',
+        executable='rviz2',
+        output='screen',
+        arguments=['-d', rviz_map],
+        condition=IfCondition(PythonExpression(['"', mode, '" == "map"']))
+    )
+
+    rviz_node_nav = Node(
+        package='rviz2',
+        executable='rviz2',
+        output='screen',
+        arguments=['-d', rviz_nav],
+        condition=IfCondition(PythonExpression(['"', mode, '" == "nav"']))
+    )
     
     l_d = LaunchDescription([declare_sim_time_arg,
                             declare_mode_arg,
@@ -163,6 +182,8 @@ def generate_launch_description():
                             map_odom_transform_node,
                             navigation_stack_node,
                             slam_tool_node,
-                            navigation_node])
+                            navigation_node,
+                            rviz_node_map,
+                            rviz_node_nav])
 
     return l_d
