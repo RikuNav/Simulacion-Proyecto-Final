@@ -1,4 +1,5 @@
 import os
+
 from glob import glob
 from setuptools import find_packages, setup
 
@@ -33,7 +34,7 @@ setup(
     entry_points={
         'console_scripts': [
             'puzzlebot_localization = mlr_nav2_puzzlebot.puzzlebot_localization:main',
-            'puzzlebot_joint_state_publisher = mlr_nav2_puzzlebot.puzzlebot_joint_state_publisher:main'
+            'puzzlebot_joint_state_publisher = mlr_nav2_puzzlebot.puzzlebot_joint_state_publisher:main',
         ],
     },
 )
