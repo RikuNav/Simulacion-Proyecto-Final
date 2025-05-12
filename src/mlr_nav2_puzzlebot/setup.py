@@ -23,6 +23,7 @@ setup(
         (os.path.join('share', package_name, 'config'), glob(os.path.join('config', '*.yaml'))),
         (os.path.join('share', package_name, 'maps'), glob(os.path.join('maps', '*.yaml'))),
         (os.path.join('share', package_name, 'maps'), glob(os.path.join('maps', '*.pgm'))),
+        (os.path.join('share', package_name, 'params'), glob(os.path.join('params', '*.yaml'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -32,7 +33,8 @@ setup(
     license='MIT',
     entry_points={
         'console_scripts': [
-            'movement = mlr_nav2_puzzlebot.movement:main',
+            'puzzlebot_localization = mlr_nav2_puzzlebot.puzzlebot_localization:main',
+            'puzzlebot_joint_state_publisher = mlr_nav2_puzzlebot.puzzlebot_joint_state_publisher:main',
         ],
     },
 )
