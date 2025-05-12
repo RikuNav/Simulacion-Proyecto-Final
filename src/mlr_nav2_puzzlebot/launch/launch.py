@@ -44,7 +44,7 @@ def generate_launch_description():
     map_path = os.path.join(package_share_dir, 'maps', map_filename)
 
     # Get the path to nav2 params
-    nav2_params_path = os.path.join(package_share_dir, 'config', param_filename)
+    nav2_params_path = os.path.join(package_share_dir, 'params', param_filename)
 
     # Get the path to ros_gz_bridge config
     ros_gz_bridge_config_path = os.path.join(package_share_dir, 'config', ros_gz_bridge_config_filename)
@@ -155,7 +155,6 @@ def generate_launch_description():
                             declare_mode_arg,
                             set_gazebo_resources,
                             set_gazebo_plugins,
-                            map_odom_transform_node,
                             robot_state_publisher_node,
                             gz_process,
                             gz_spawn_puzzlebot_node,
