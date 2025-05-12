@@ -160,6 +160,7 @@ def generate_launch_description():
                             gz_spawn_puzzlebot_node,
                             gz_camera_process,
                             gz_bridge_node,
+                            map_odom_transform_node,
                             navigation_stack_node,
                             slam_tool_node,
                             navigation_node])
