@@ -66,5 +66,3 @@ ros2 launch mlr_nav2_puzzlebot launch.py mode:=nav use_sim_time:=True
 ## Video of our working package
 
 https://www.youtube.com/watch?v=GmPqFrR-eNQ
-
-![video](https://www.youtube.com/watch?v=GmPqFrR-eNQ)
