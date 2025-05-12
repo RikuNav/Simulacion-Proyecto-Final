@@ -67,9 +67,9 @@ def generate_launch_description():
     with open(puzzlebot_config_path, 'r') as puzzlebot_config:
         puzzlebot_config_dict = yaml.safe_load(puzzlebot_config)
 
-    initial_x = puzzlebot_config_dict['puzzlebot_localization']['ros__parameters']['initial_pose']['x']
-    initial_y = puzzlebot_config_dict['puzzlebot_localization']['ros__parameters']['initial_pose']['y']
-    initial_theta = puzzlebot_config_dict['puzzlebot_localization']['ros__parameters']['initial_pose']['theta']
+    initial_x = puzzlebot_config_dict['puzzlebot_localization_node']['ros__parameters']['initial_pose']['x']
+    initial_y = puzzlebot_config_dict['puzzlebot_localization_node']['ros__parameters']['initial_pose']['y']
+    initial_theta = puzzlebot_config_dict['puzzlebot_localization_node']['ros__parameters']['initial_pose']['theta']
 
     # Extract the global parameters file
     with open(global_params_path, 'r') as file:
