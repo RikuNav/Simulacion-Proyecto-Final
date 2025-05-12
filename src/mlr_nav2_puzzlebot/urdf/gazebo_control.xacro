@@ -35,15 +35,6 @@
             <joint_name>${prefix}wheel_right_joint</joint_name>
             <joint_name>${prefix}wheel_left_joint</joint_name>
         </plugin>
-
-        <!-- <plugin filename="gz-sim-odometry-publisher-system" name="gz::sim::systems::OdometryPublisher">
-            <odom_frame>ground_truth</odom_frame>
-            <robot_base_frame>${prefix}base_footprint</robot_base_frame>
-            <odom_publish_frequency>50</odom_publish_frequency>
-            <odom_topic>${prefix}ground_truth</odom_topic>
-            <tf_topic>tf</tf_topic>
-            <dimensions>2</dimensions>
-        </plugin> -->
     </gazebo>
 </xacro:macro>
 </robot>
