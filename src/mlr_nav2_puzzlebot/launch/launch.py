@@ -1,5 +1,6 @@
 import os
 import transforms3d as t3d
+import yaml
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
@@ -17,10 +18,8 @@ def generate_launch_description():
     world_filename = 'puzzlebot_world.world'
     robot_xacro_filename = 'puzzlebot.xacro'
     ros_gz_bridge_config_filename = 'puzzlebot_bridge.yaml'
-
-    initial_x = -1.2
-    initial_y = 1.2
-    initial_theta = -1.57
+    puzzlebot_config_filename = 'puzzlebot_nodes_params.yaml'
+    global_params_filename = 'puzzlebot_global_params.yaml'
 
     # Node parameters default values
     sim_time = 'true'
@@ -49,6 +48,12 @@ def generate_launch_description():
     # Get the path to ros_gz_bridge config
     ros_gz_bridge_config_path = os.path.join(package_share_dir, 'config', ros_gz_bridge_config_filename)
 
+    # Get the path to puzzlebot config
+    puzzlebot_config_path = os.path.join(package_share_dir, 'config', puzzlebot_config_filename)
+
+    # Get the global parameters config
+    global_params_path = os.path.join(package_share_dir, 'config', global_params_filename)
+
     # Path for robot xacro
     robot_path = os.path.join(package_share_dir, 'urdf', robot_xacro_filename)
     
@@ -57,6 +62,18 @@ def generate_launch_description():
                                 ' camera_frame:=', 'camera_link_optical',
                                 ' lidar_frame:=', 'laser_frame',
                                 ' tof_frame:=', 'tof_link'])
+    
+    # Extract initial position from puzzlebot_node_params.yaml
+    with open(puzzlebot_config_path, 'r') as puzzlebot_config:
+        puzzlebot_config_dict = yaml.safe_load(puzzlebot_config)
+
+    initial_x = puzzlebot_config_dict['puzzlebot_localization']['ros__parameters']['initial_pose']['x']
+    initial_y = puzzlebot_config_dict['puzzlebot_localization']['ros__parameters']['initial_pose']['y']
+    initial_theta = puzzlebot_config_dict['puzzlebot_localization']['ros__parameters']['initial_pose']['theta']
+
+    # Extract the global parameters file
+    with open(global_params_path, 'r') as file:
+        global_params = yaml.safe_load(file)
     
     # Set Gazebo environment variables
     set_gazebo_resources = SetEnvironmentVariable(
@@ -115,7 +132,19 @@ def generate_launch_description():
                         executable='parameter_bridge',
                         parameters=[{'config_file': ros_gz_bridge_config_path,}],
                         output='screen')
+
+    # Puzzlebot localization node
+    puzzlebot_localization_node = Node(package='mlr_nav2_puzzlebot',
+                                       executable='puzzlebot_localization',
+                                       parameters=[puzzlebot_config_path, global_params, {'use_sim_time': use_sim_time}],
+                                       output='screen')
     
+    # Puzzlebot joint state publisher node
+    puzzlebot_joint_state_publisher = Node(package='mlr_nav2_puzzlebot',
+                                            executable='puzzlebot_joint_state_publisher',
+                                            parameters=[global_params, {'use_sim_time': use_sim_time}],
+                                            output='screen')
+            
     # Navigation stack
     navigation_stack_node = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -160,7 +189,8 @@ def generate_launch_description():
                             gz_spawn_puzzlebot_node,
                             gz_camera_process,
                             gz_bridge_node,
-                            map_odom_transform_node,
+                            puzzlebot_localization_node,
+                            puzzlebot_joint_state_publisher,
                             navigation_stack_node,
                             slam_tool_node,
                             navigation_node])
