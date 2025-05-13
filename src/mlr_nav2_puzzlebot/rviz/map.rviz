@@ -6,13 +6,9 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
-<<<<<<< HEAD:src/mlr_nav2_puzzlebot/rviz_config/map.rviz
-        - /Map1
-=======
         - /Odometry1/Topic1
         - /LaserScan1/Status1
         - /Map1/Topic1
->>>>>>> parameter_tuning:src/mlr_nav2_puzzlebot/rviz/map.rviz
       Splitter Ratio: 0.5
     Tree Height: 395
   - Class: rviz_common/Selection
@@ -149,9 +145,6 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: true
-<<<<<<< HEAD:src/mlr_nav2_puzzlebot/rviz_config/map.rviz
-      Marker Scale: 1
-=======
         base_footprint:
           Value: true
         base_link:
@@ -183,7 +176,6 @@ Visualization Manager:
         wheel_right_link:
           Value: true
       Marker Scale: 0.5
->>>>>>> parameter_tuning:src/mlr_nav2_puzzlebot/rviz/map.rviz
       Name: TF
       Show Arrows: true
       Show Axes: true
@@ -313,33 +305,13 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-<<<<<<< HEAD:src/mlr_nav2_puzzlebot/rviz_config/map.rviz
-      Class: rviz_default_plugins/Orbit
-      Distance: 19.327848434448242
-=======
       Angle: 0
       Class: rviz_default_plugins/TopDownOrtho
->>>>>>> parameter_tuning:src/mlr_nav2_puzzlebot/rviz/map.rviz
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
-<<<<<<< HEAD:src/mlr_nav2_puzzlebot/rviz_config/map.rviz
-      Focal Point:
-        X: -8.187604904174805
-        Y: -0.14638227224349976
-        Z: -6.91909646987915
-      Focal Shape Fixed Size: true
-      Focal Shape Size: 0.05000000074505806
-      Invert Z Axis: false
-      Name: Current View
-      Near Clip Distance: 0.009999999776482582
-      Pitch: 0.8803974390029907
-      Target Frame: <Fixed Frame>
-      Value: Orbit (rviz)
-      Yaw: 0.08728928118944168
-=======
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
@@ -348,7 +320,6 @@ Visualization Manager:
       Value: TopDownOrtho (rviz_default_plugins)
       X: 0
       Y: 0
->>>>>>> parameter_tuning:src/mlr_nav2_puzzlebot/rviz/map.rviz
     Saved: ~
 Window Geometry:
   Displays:
