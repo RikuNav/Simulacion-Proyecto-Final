@@ -12,7 +12,8 @@ The package was successfully compiled using `colcon build`. Below are screenshot
 - The internal structure of the package directory.
 - The successful output of the `colcon build` command.
 
-![Sim Launch](/Deliverables/colcon_build.png)
+![Pkg Create](/images/pkg_create.png)
+![Colcon build](/images/colcon.png)
 
 
 ## Launch File for Simulation
@@ -24,21 +25,24 @@ A main launch file was created to start the simulation in Gazebo Garden with the
 ```
 ros2 launch mlr_nav2_puzzlebot launch.py
 ```
-![Sim Launch](/Deliverables/map.png)
+![Pista](/images/pista_sim.png)
 
 
-## RVIZ for Mapping and Navigation
+## RVIZ for Profile Configurations
 
 To aid visualization, two RVIZ profiles were included:
 
 ### RVIZ Configuration for Mapping:
 ```
-ros2 launch mlr_nav2_puzzlebot launch.py rviz_config_file:=map.rviz
+ros2 launch mlr_nav2_puzzlebot launch.py mode:=map use_sim_time:=True
 ```
-Add picture
+![Map Rviz](/images/map_rviz.jpeg)
 
-### RVIZ configurations are organized as follows:
-Add picture
+### RVIZ Configuration for Navigation:
+```
+ros2 launch mlr_nav2_puzzlebot launch.py mode:=nav use_sim_time:=True
+```
+![Nav Rviz](/images/nav_rviz.jpeg)
 
 ## System Requirements
 
@@ -52,8 +56,13 @@ Add picture
 ros2 launch mlr_nav2_puzzlebot launch.py
 
 # Launch RVIZ for mapping
-ros2 launch mlr_nav2_puzzlebot launch.py rviz_config_file:=map.rviz
+ros2 launch mlr_nav2_puzzlebot launch.py mode:=map use_sim_time:=True
 
 # Launch RVIZ for navigation
-ros2 launch mlr_nav2_puzzlebot launch.py rviz_config_file:=nav.rviz
+ros2 launch mlr_nav2_puzzlebot launch.py mode:=nav use_sim_time:=True
+
 ```
+
+## Video of our working package
+
+https://www.youtube.com/watch?v=GmPqFrR-eNQ

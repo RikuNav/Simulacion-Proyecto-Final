@@ -1,0 +1,7 @@
+puzzlebot_localization_node:
+  ros__parameters:
+    localization_update_rate: 50.0
+    initial_pose:
+      x: -1.2
+      y: 1.2
+      theta: -1.57
