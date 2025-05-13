@@ -12,9 +12,6 @@ class PuzzlebotJointPublisher(Node):
     def __init__(self):
         super().__init__('puzzlebot_joint_state_publisher_node')
 
-        # Namespace
-        self.namespace = self.get_namespace().rstrip('/')
-
         # Robot parameters declaration
         self.declare_parameter('wheel_radius', 0.05)
         self.declare_parameter('wheel_base', 0.19)
@@ -44,7 +41,7 @@ class PuzzlebotJointPublisher(Node):
         odom_base_footprint_transform = TransformStamped()
         odom_base_footprint_transform.header.stamp = self.get_clock().now().to_msg()
         odom_base_footprint_transform.header.frame_id = 'odom'
-        odom_base_footprint_transform.child_frame_id = f'{self.namespace}/base_footprint'
+        odom_base_footprint_transform.child_frame_id = 'base_footprint'
         odom_base_footprint_transform.transform.translation.x = msg.pose.pose.position.x
         odom_base_footprint_transform.transform.translation.y = msg.pose.pose.position.y
         odom_base_footprint_transform.transform.translation.z = 0.0

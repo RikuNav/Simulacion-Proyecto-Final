@@ -1,0 +1,252 @@
+slam_toolbox:
+  ros__parameters:
+
+    use_sim_time: false
+    use_odometry: true
+    ######### SOLVER #########
+     # ¿Qué es “solver”?
+    # El “solver” es el motor que resuelve el problema de optimización de tu pose‑graph:
+    # dadas muchas observaciones relativas (escaneos, loop closures), encuentra
+    # el conjunto de poses (nodos) que minimizan el error global.  
+    solver_plugin: solver_plugins::CeresSolver  
+    # ▶ Usamos Ceres, que implementa métodos de mínimos cuadrados no lineales.
+
+    # -------------------------
+    # Linealizador (Linear solver)
+    # -------------------------
+    # Resuelve el sistema lineal interno en cada iteración de Gauss‑Newton / Levenberg‑Marquardt.
+    # SPARSE_NORMAL_CHOLESKY es bueno para gráficas grandes y dispersas.
+    # Para tu mapa pequeño (≈100–200 nodos), DENSE_SCHUR suele ser más rápido y estable.
+    ceres_linear_solver: DENSE_SCHUR  
+    # Usar DENSE_SCHUR para aprovechar que tu grafo cabe en memoria densa.
+
+    # -------------------------
+    # Preacondicionador (Preconditioner)
+    # -------------------------
+    # Acelera la resolución iterativa de sistemas dispersos.  
+    # SCHUR_JACOBI funciona bien junto a SPARSE_NORMAL_CHOLESKY.  
+    # Con DENSE_SCHUR no se usa precondicionador, pero lo dejamos en JACOBI por compatibilidad.
+    ceres_preconditioner: SCHUR_JACOBI  
+
+    # -------------------------
+    # Estrategia de región de confianza (Trust strategy)
+    # -------------------------
+    # Controla cómo se elige el paso en el espacio de parámetros:
+    #  – LEVENBERG_MARQUARDT: mezcla Gauss‑Newton con gradiente descendente (robusto).
+    #  – DOGLEG: usa un “dogleg” en la región de confianza (a veces converge más rápido).
+    ceres_trust_strategy: LEVENBERG_MARQUARDT  
+    # Para mapas pequeños y muchas vueltas, Levenberg‑Marquardt suele ser más estable.
+
+    # -------------------------
+    # Tipo de Dogleg (solo si trust_strategy= DOGLEG)
+    # -------------------------
+    # TRADITIONAL_DOGLEG es la formulación clásica. No se usa si no activas DOGLEG.
+    ceres_dogleg_type: TRADITIONAL_DOGLEG  
+
+    # -------------------------
+    # Función de pérdida (Loss function)
+    # -------------------------
+    # Robustiza la optimización frente a “outliers” (observaciones muy malas).
+    #  – None: sin robustez (mínimos cuadrados puros).  
+    #  – Huber: reduce el peso de errores grandes.  
+    #  – Cauchy, Tukey, etc.
+    ceres_loss_function: Huber  
+    # Huber con delta por defecto. Ayuda a que malas asociaciones de scan‑matching
+    # no deformen todo el grafo.
+
+    ######### MARCOS DE REFERENCIA Y GENERAL #########
+    # — TF frames — 
+    # odom_frame: frame donde se acumula la odometría integrada
+    # map_frame: frame fijo del mapa global
+    # base_frame: frame base del robot
+    odom_frame: odom                # “odom” produce transform odom→base_footprint
+    map_frame: map                  # mapa global publicado por SLAM
+    base_frame: base_footprint      # tu robot usa base_footprint como cuerpo
+
+    # — Tópico de escaneo — 
+    # sensor laser publica en /scan; SLAM lo suscribe
+    scan_topic: /scan
+
+    # — Modo de operación —
+    # mapping: construye/actualiza el mapa
+    # localization: usa map para localizarse
+    mode: mapping
+
+    # — Guardado de mapa —
+    # Al finalizar, volcamos .pgm/.yaml automáticamente
+    use_map_saver: true
+
+    # — Interactividad —
+    # Permite pausar, reiniciar y ajustar online desde RViz/rqt
+    enable_interactive_mode: true
+
+    # — Logging —
+    # debug_logging true imprime todo; en VM puede ser muy verboso
+    debug_logging: false
+
+    # — Frecuencia de publicación TF odom→base —
+    # 0.02 s → 50 Hz. Con VM lento puedes subir a 0.05 s (20 Hz) para reducir carga de CPU .
+    transform_publish_period: 0.05
+
+    # — Timeout para transform lookup —
+    # Tiempo máximo a esperar por tf; 0.2 s suele ser suficiente
+    transform_timeout: 0.5 # dar más tiempo a la VM lenta
+
+    # — Duración del buffer TF —
+    # Mantiene historiales de transform por retransform/lookback
+    tf_buffer_duration: 30.0
+
+    # — Resolución del mapa —
+    # Celda de 3 cm para capturar pasillos de 60 cm (≈20 celdas de ancho)
+    resolution: 0.03
+
+    # — Intervalo de actualización del mapa —
+    # En mapas 3×3 m un update cada 2 s es suficientemente rápido
+    # y alivia la carga de la VM versus valores menores.
+    map_update_interval: 2.0
+
+    # — Scan throttling —
+    # Procesa 1 de cada N escaneos para aligerar la carga.
+    # Con tu LiDAR a 10 Hz y VM lento, mantener en 1 o 2.
+    throttle_scans: 1                # Si va lento, prueba con 2
+
+    # — Tamaño de pila para serializar mapas grandes —
+    # 40 MB está bien; en VM con poco RAM podrías bajar a 20 MB
+    stack_size_to_use: 20000000      # 20 MB aún suficiente para 3×3 m
+
+    # — Frecuencia de publicación de mapa en tópico —
+    # Sólo relevante en modo localization. Lo dejamos por defecto.
+    map_publish_period: 1.0          # (s)
+
+    # — Rango mínimo/máximo de láser para construcción de imagen —
+    # Valores fuera de este rango se descartan antes de rasterizar mapa.
+    min_laser_range: 0.2       # Descarta ecos demasiado cercanos (< 20 cm). Igualar al mínimo físico del sensor
+    max_laser_range: 5.0       # Reducido de 20 m a 5 m para tu área 3×3 m
+
+    # — Umbrales de ocupación para imagen trinary —
+    # trinary_mode: ocupa occupied_thresh/free_thresh
+    occupied_thresh: 0.65
+    free_thresh: 0.25
+
+    ######### SCAN MATCHING #########
+     # Ajusta la pose del robot contra el mapa usando correlación de escaneos.
+    use_scan_matching: true     # Habilita ajuste fino de pose con cada escaneo
+    use_scan_barycenter: true   # Centra el escaneo antes de match, mejora estabilidad
+
+    # — Umbral para disparar un nuevo scan-match —
+    # Evita hacer matching si el robot no se movió lo suficiente.
+    minimum_travel_distance: 0.2    # Cada 20 cm de traslación → buen compromiso precisión/carga
+    minimum_travel_heading: 0.1     # Cada ~6° de rotación → suficiente para LiDAR lento
+
+    # — Buffer de escaneos recientes para loop closures / multi-match —
+    scan_buffer_size: 10                # Guarda últimos 10 escaneos
+    scan_buffer_maximum_scan_distance: 4.0  
+      # Ignora puntos a > 4 m dentro del buffer: 
+      # en un espacio 3×3 m no aportan loops útiles, acelera matching
+
+    ######### LOOP CLOSURE #########
+    # Habilita o deshabilita la detección de “loops” (cuando el robot vuelve a una zona ya mapeada).
+    do_loop_closing: true  
+    # ↑ En un espacio pequeño (3×3 m) conviene mantenerlo activo para corregir
+    #   lentamente los desvíos acumulados de odometría y scan‐matching.
+
+    # Máxima distancia (m) entre la posición actual y una pasada anterior
+    # para considerar un candidato de “loop”.  
+    # Al limitarlo a 1.5 m evitamos comparaciones inútiles con zonas lejanas
+    # en un mapa que sólo mide ~3 m de ancho.
+    loop_search_maximum_distance: 1.5  
+
+    # Número mínimo de escaneos consecutivos (chain) que deben encajar
+    # para aceptar un “loop”.  
+    # Un valor de 6 significa que se encuentran coincidencias consistentes
+    # en al menos 6 escaneos antes de realizar la corrección global.
+    loop_match_minimum_chain_size: 6  
+
+    # Durante la búsqueda “grosa” (coarse) de posibles loops,
+    # se permite una varianza máxima en metros de la nube de puntos.  
+    # Un valor de 1.5 m refleja que toleramos discrepancias moderadas
+    # en un espacio de pasillos de 0.6 m de ancho.
+    loop_match_maximum_variance_coarse: 1.5  
+
+    # Umbral mínimo de “respuesta” (correlación) en la etapa coarse.
+    # Sólo se consideran candidatos con al menos 0.3 de respuesta,
+    # reduciendo falsos positivos en entornos con poca geometría.
+    loop_match_minimum_response_coarse: 0.30  
+
+    # Umbral mínimo de “respuesta” en la etapa fina (fine).  
+    # Aquí exigimos mayor confianza (0.5) antes de cerrar el loop definitivamente.
+    loop_match_minimum_response_fine: 0.50  
+
+    ######### ALIGNMENT (CORRELATION) #########
+    # Área de búsqueda (m) alrededor de la posición sugerida para alinear el nuevo escaneo
+    # En un pasillo de 0.6 m basta con ±0.3 m; reducirlo ahorra CPU.
+    correlation_search_space_dimension: 0.3      # ±0.3 m de radio
+
+    # Resolución (m) de la rejilla de búsqueda
+    # 2 cm permite afinar sin demasiados puntos de evaluación.
+    correlation_search_space_resolution: 0.02    # 2 cm pasos
+
+    # Desviación (m) para “esparcir” (smear) la nube y suavizar picos de correlación
+    # 5 cm atenúa ruido de sensores y ligeros desajustes.
+    correlation_search_space_smear_deviation: 0.1  # 10 cm desvío
+
+    loop_search_space_dimension:     1.5   # Sólo busca loops a ≤ 1.5 m
+    loop_search_space_resolution:    0.05  # 5 cm de precisión
+    loop_search_space_smear_deviation: 0.03 # Mínimo 0.025, ahora 3 cm de “smear”
+
+    ######### PENALIZACIÓN (RESTRICCIONES DE MOVIMIENTO) #########
+    # Balancea confianza entre odometría y scan-matching
+
+    # ¿Cuánto penalizar saltos grandes en traslación entre escaneos?
+    # Un valor alto (1.0) desincentiva drifts mayores a unos cms.
+    distance_variance_penalty: 1.0    # Penaliza fuertemente traslaciones grandes
+
+    # ¿Cuánto penalizar saltos grandes en orientación?
+    # Un valor alto (2.0) ayuda a mantener continuidad angular
+    # en robots lentos y entornos estrechos.
+    angle_variance_penalty: 2.0       # Penaliza fuertemente rotaciones grandes
+
+    ######### BÚSQUEDA FINA/GRUESA #########
+    # Ángulo (rad) de paso en la búsqueda fina de correspondencias
+    # 0.00349 rad ≈ 0.2°: muy detallado para pequeños ajustes angulares
+    fine_search_angle_offset: 0.00349      # 0.2° paso fino
+
+    # Ángulo (rad) de paso en la búsqueda gruesa (coarse)
+    # 0.349 rad ≈ 20°: rápido barrido inicial para encontrar la mejor región
+    coarse_search_angle_offset: 0.349      # 20° paso grueso
+
+    # Resolución angular (rad) en la fase gruesa
+    # 0.0349 rad ≈ 2° entre muestras en coarse search
+    coarse_angle_resolution: 0.0349        # 2° resolución coarse
+
+    # Penalización mínima (0–1) para aceptar un match angular
+    # 0.9: se requiere alta similitud en ángulo antes de refinar
+    minimum_angle_penalty: 0.9             # evita matches con gran error angular
+
+    # Penalización mínima (0–1) para aceptar un match de distancia
+    # 0.5: tolera algo de desviación en distancia antes de descartar
+    minimum_distance_penalty: 0.5          # descarta matches con gran offset lineal
+
+    # ¿Expandir la respuesta de correlación para suavizar picos?
+    # true: ayuda a que picos locales pequeños no dominen la elección
+    use_response_expansion: true           # Suaviza picos en la función de correlación
+
+    ########## FILTRADO DE CELDAS (POST-PROCESO) ##########
+
+    # Número mínimo de escaneos que deben “pasar” por una celda para marcarla libre
+    # 2: reduce ruido, evita celdas libres falsas por un solo escaneo
+    min_pass_through: 2                    # Requiere 2 pasadas para libre
+
+    # Umbral de ocupación (0–1) para marcar una celda como muro
+    # 0.1: celdas ligeramente ocupadas se ignoran, útil para paredes finas
+    occupancy_threshold: 0.1               # Evita muros “fantasma” en bordes delgados
+
+    ########## PARÁMETROS ADICIONALES RECOMENDADOS ##########
+
+    # Ajusta cuántos escaneos previos se usan para suavizar el mapa final.
+    # Para un mapa pequeño de 3×3 m, un buffer de 5 escaneos ayuda a consolidar sin ralentizar.
+    scan_accumulation: 5                   # Acumula 5 escaneos antes de actualizar
+
+    # Ajusta la frecuencia de publicación de odometría en SLAM (sólo si SLAM publica tf)
+    # 20 Hz mantiene tf actualizado sin saturar CPU.
+    odom_publish_frequency: 20.0              # ⏱Publica odom a 20 Hz

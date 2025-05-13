@@ -6,6 +6,7 @@ import transforms3d as t3d
 from nav_msgs.msg import Odometry
 from rclpy.node import Node
 from std_msgs.msg import Float32
+from rclpy import qos
 
 class Localization(Node):
     def __init__(self):
@@ -27,8 +28,8 @@ class Localization(Node):
                         self.get_parameter('initial_pose.theta').get_parameter_value().double_value]
 
         # Subscribers
-        self.create_subscription(Float32, 'VelocityEncR', self.wr_callback, 10)
-        self.create_subscription(Float32, 'VelocityEncL', self.wl_callback, 10)
+        self.create_subscription(Float32, 'VelocityEncR', self.wr_callback, qos.qos_profile_sensor_data)
+        self.create_subscription(Float32, 'VelocityEncL', self.wl_callback, qos.qos_profile_sensor_data)
         
         # Publishers
         self.odometry_publisher = self.create_publisher(Odometry, 'odom', 10)

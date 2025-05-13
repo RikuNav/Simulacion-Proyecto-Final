@@ -23,13 +23,15 @@ def generate_launch_description():
 
     # Node parameters default values
     op_mode = 'map'
-    use_sim_time = 'false'
+    sim_time = 'false'
 
     # Launch arguments
+    declare_sim_time_arg = DeclareLaunchArgument('use_sim_time', default_value=sim_time, description='Use simulated time')
     declare_mode_arg = DeclareLaunchArgument('mode', default_value=op_mode, description='Mode of operation (map or nav)')
 
     # Get launch params values
     mode = LaunchConfiguration('mode')
+    use_sim_time = LaunchConfiguration('use_sim_time')
 
     # Get the package share directory
     package_share_dir = get_package_share_directory('mlr_nav2_puzzlebot')
@@ -55,6 +57,8 @@ def generate_launch_description():
     # Path for robot xacro
     robot_path = os.path.join(package_share_dir, 'urdf', robot_xacro_filename)
     
+    slam_toolbox_path = os.path.join(get_package_share_directory('slam_toolbox'), 'params', 'slam_toolbox_config.yaml')
+
     rviz_map = os.path.join(package_share_dir, 'rviz', 'map.rviz')
     rviz_nav = os.path.join(package_share_dir, 'rviz', 'nav.rviz')
 
@@ -123,7 +127,7 @@ def generate_launch_description():
             os.path.join(get_package_share_directory('slam_toolbox'), 'launch', 'online_async_launch.py')
         ),
         launch_arguments={
-            'use_sim_time': use_sim_time
+            'slam_params_file': slam_toolbox_path,
         }.items(),
         condition=IfCondition(PythonExpression(['"', mode, '" == "map"']))
     )
@@ -158,6 +162,8 @@ def generate_launch_description():
     )
     
     l_d = LaunchDescription([declare_mode_arg,
+                            declare_sim_time_arg,
+                            map_odom_transform_node,
                             robot_state_publisher_node,
                             puzzlebot_localization_node,
                             puzzlebot_joint_state_publisher,
