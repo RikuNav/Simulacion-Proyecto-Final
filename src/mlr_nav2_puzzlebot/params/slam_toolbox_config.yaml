@@ -86,11 +86,11 @@ slam_toolbox:
 
     # — Frecuencia de publicación TF odom→base —
     # 0.02 s → 50 Hz. Con VM lento puedes subir a 0.05 s (20 Hz) para reducir carga de CPU .
-    transform_publish_period: 0.05
+    transform_publish_period: 0.02
 
     # — Timeout para transform lookup —
     # Tiempo máximo a esperar por tf; 0.2 s suele ser suficiente
-    transform_timeout: 0.5 # dar más tiempo a la VM lenta
+    transform_timeout: 0.2 # dar más tiempo a la VM lenta
 
     # — Duración del buffer TF —
     # Mantiene historiales de transform por retransform/lookback
@@ -103,7 +103,7 @@ slam_toolbox:
     # — Intervalo de actualización del mapa —
     # En mapas 3×3 m un update cada 2 s es suficientemente rápido
     # y alivia la carga de la VM versus valores menores.
-    map_update_interval: 2.0
+    map_update_interval: 1.0
 
     # — Scan throttling —
     # Procesa 1 de cada N escaneos para aligerar la carga.
@@ -154,7 +154,7 @@ slam_toolbox:
     # para considerar un candidato de “loop”.  
     # Al limitarlo a 1.5 m evitamos comparaciones inútiles con zonas lejanas
     # en un mapa que sólo mide ~3 m de ancho.
-    loop_search_maximum_distance: 1.5  
+    loop_search_maximum_distance: 1.2  
 
     # Número mínimo de escaneos consecutivos (chain) que deben encajar
     # para aceptar un “loop”.  
@@ -249,4 +249,4 @@ slam_toolbox:
 
     # Ajusta la frecuencia de publicación de odometría en SLAM (sólo si SLAM publica tf)
     # 20 Hz mantiene tf actualizado sin saturar CPU.
-    odom_publish_frequency: 20.0              # ⏱Publica odom a 20 Hz
+    odom_publish_frequency: 20.0              # Publica odom a 20 Hz
