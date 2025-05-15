@@ -1,110 +1,75 @@
 slam_toolbox:
   ros__parameters:
 
-    use_sim_time: false
-    use_odometry: true
-    solver_plugin: solver_plugins::CeresSolver  
-    ceres_linear_solver: DENSE_SCHUR  
-    ceres_preconditioner: SCHUR_JACOBI  
-    ceres_trust_strategy: LEVENBERG_MARQUARDT  
-    ceres_dogleg_type: TRADITIONAL_DOGLEG  
-    ceres_loss_function: Huber  
+    # Plugin params
+    solver_plugin: solver_plugins::CeresSolver
+    ceres_linear_solver: DENSE_SCHUR
+    ceres_preconditioner: SCHUR_JACOBI
+    ceres_trust_strategy: LEVENBERG_MARQUARDT
+    ceres_dogleg_type: TRADITIONAL_DOGLEG
+    ceres_loss_function: Huber
+
+    # ROS Parameters
     odom_frame: odom
     map_frame: map
     base_frame: base_footprint
     scan_topic: /scan
-    mode: mapping
     use_map_saver: true
-    enable_interactive_mode: true
+    mode: mapping #localization
+
+    # if you'd like to immediately start continuing a map at a given pose
+    # or at the dock, but they are mutually exclusive, if pose is given
+    # will use pose
+    #map_file_name: test_steve
+    # map_start_pose: [0.0, 0.0, 0.0]
+    #map_start_at_dock: true
+
     debug_logging: false
-    transform_publish_period: 0.02
-    transform_timeout: 0.2
-    tf_buffer_duration: 30.0
-    resolution: 0.01
-    map_update_interval: 0.5
     throttle_scans: 1
-    stack_size_to_use: 40000000
-    map_publish_period: 0.5
-    min_laser_range: 0.2 
-    max_laser_range: 5.0
-    occupied_thresh: 0.65
-    free_thresh: 0.25
+    transform_publish_period: 0.02 #if 0 never publishes odometry
+    map_update_interval: 0.5
+    resolution: 0.03
+    min_laser_range: 0.2 #for rastering images
+    max_laser_range: 5.0 #for rastering images
+    minimum_time_interval: 0.5
+    transform_timeout: 0.2
+    tf_buffer_duration: 30.
+    stack_size_to_use: 40000000 #// program needs a larger stack size to serialize large maps
+    enable_interactive_mode: true
+
+    # General Parameters
     use_scan_matching: true
     use_scan_barycenter: true
-    minimum_travel_distance: 0.05
-    minimum_travel_heading: 0.08
+    minimum_travel_distance: 0.5
+    minimum_travel_heading: 0.5
     scan_buffer_size: 10
-    scan_buffer_maximum_scan_distance: 4.0  
-    do_loop_closing: true  
-    loop_search_maximum_distance: 1.2  
-    loop_match_minimum_chain_size: 6  
-    loop_match_maximum_variance_coarse: 1.0
-    loop_match_minimum_response_coarse: 0.20  
-    loop_match_minimum_response_fine: 0.30  
-    correlation_search_space_dimension: 0.3
-    correlation_search_space_resolution: 0.02    # 2 cm pasos
+    scan_buffer_maximum_scan_distance: 10.0
+    link_match_minimum_response_fine: 0.1  
+    link_scan_maximum_distance: 1.5
+    loop_search_maximum_distance: 3.0
+    do_loop_closing: true 
+    loop_match_minimum_chain_size: 10           
+    loop_match_maximum_variance_coarse: 3.0  
+    loop_match_minimum_response_coarse: 0.35    
+    loop_match_minimum_response_fine: 0.45
 
-    # Desviación (m) para “esparcir” (smear) la nube y suavizar picos de correlación
-    # 5 cm atenúa ruido de sensores y ligeros desajustes.
-    correlation_search_space_smear_deviation: 0.05  # 10 cm desvío
+    # Correlation Parameters - Correlation Parameters
+    correlation_search_space_dimension: 0.5
+    correlation_search_space_resolution: 0.01
+    correlation_search_space_smear_deviation: 0.1 
 
-    loop_search_space_dimension:     1.5   # Sólo busca loops a ≤ 1.5 m
-    loop_search_space_resolution:    0.05  # 5 cm de precisión
-    loop_search_space_smear_deviation: 0.025 # Mínimo 0.025, ahora 3 cm de “smear”
+    # Correlation Parameters - Loop Closure Parameters
+    loop_search_space_dimension: 8.0
+    loop_search_space_resolution: 0.05
+    loop_search_space_smear_deviation: 0.03
 
-    ######### PENALIZACIÓN (RESTRICCIONES DE MOVIMIENTO) #########
-    # Balancea confianza entre odometría y scan-matching
+    # Scan Matcher Parameters
+    distance_variance_penalty: 0.5      
+    angle_variance_penalty: 1.0    
 
-    # ¿Cuánto penalizar saltos grandes en traslación entre escaneos?
-    # Un valor alto (1.0) desincentiva drifts mayores a unos cms.
-    distance_variance_penalty: 1.0    # Penaliza fuertemente traslaciones grandes
-
-    # ¿Cuánto penalizar saltos grandes en orientación?
-    # Un valor alto (2.0) ayuda a mantener continuidad angular
-    # en robots lentos y entornos estrechos.
-    angle_variance_penalty: 2.0       # Penaliza fuertemente rotaciones grandes
-
-    ######### BÚSQUEDA FINA/GRUESA #########
-    # Ángulo (rad) de paso en la búsqueda fina de correspondencias
-    # 0.00349 rad ≈ 0.2°: muy detallado para pequeños ajustes angulares
-    fine_search_angle_offset: 0.00175       # 0.2° paso fino
-
-    # Ángulo (rad) de paso en la búsqueda gruesa (coarse)
-    # 0.349 rad ≈ 20°: rápido barrido inicial para encontrar la mejor región
-    coarse_search_angle_offset: 0.0175       # 20° paso grueso
-
-    # Resolución angular (rad) en la fase gruesa
-    # 0.0349 rad ≈ 2° entre muestras en coarse search
-    coarse_angle_resolution: 0.0349        # 2° resolución coarse
-
-    # Penalización mínima (0–1) para aceptar un match angular
-    # 0.9: se requiere alta similitud en ángulo antes de refinar
-    minimum_angle_penalty: 0.9             # evita matches con gran error angular
-
-    # Penalización mínima (0–1) para aceptar un match de distancia
-    # 0.5: tolera algo de desviación en distancia antes de descartar
-    minimum_distance_penalty: 0.5          # descarta matches con gran offset lineal
-
-    # ¿Expandir la respuesta de correlación para suavizar picos?
-    # true: ayuda a que picos locales pequeños no dominen la elección
-    use_response_expansion: true           # Suaviza picos en la función de correlación
-
-    ########## FILTRADO DE CELDAS (POST-PROCESO) ##########
-
-    # Número mínimo de escaneos que deben “pasar” por una celda para marcarla libre
-    # 2: reduce ruido, evita celdas libres falsas por un solo escaneo
-    min_pass_through: 3                    # Requiere 2 pasadas para libre
-
-    # Umbral de ocupación (0–1) para marcar una celda como muro
-    # 0.1: celdas ligeramente ocupadas se ignoran, útil para paredes finas
-    occupancy_threshold: 0.2              # Evita muros “fantasma” en bordes delgados
-
-    ########## PARÁMETROS ADICIONALES RECOMENDADOS ##########
-
-    # Ajusta cuántos escaneos previos se usan para suavizar el mapa final.
-    # Para un mapa pequeño de 3×3 m, un buffer de 5 escaneos ayuda a consolidar sin ralentizar.
-    scan_accumulation: 5                   # Acumula 5 escaneos antes de actualizar
-
-    # Ajusta la frecuencia de publicación de odometría en SLAM (sólo si SLAM publica tf)
-    # 20 Hz mantiene tf actualizado sin saturar CPU.
-    odom_publish_frequency: 20.0              # Publica odom a 20 Hz
+    fine_search_angle_offset: 0.00349     
+    coarse_search_angle_offset: 0.349   
+    coarse_angle_resolution: 0.0349        
+    minimum_angle_penalty: 0.9
+    minimum_distance_penalty: 0.5
+    use_response_expansion: true

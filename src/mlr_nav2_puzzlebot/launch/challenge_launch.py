@@ -13,7 +13,7 @@ from launch_ros.parameter_descriptions import ParameterValue
 
 def generate_launch_description():
     # Node variables
-    map_filename = 'puzzlebot_map.yaml'
+    map_filename = 'my_map.yaml'
     param_filename = 'nav2_config.yaml'
     world_filename = 'puzzlebot_world.world'
     robot_xacro_filename = 'puzzlebot.xacro'
@@ -57,7 +57,7 @@ def generate_launch_description():
     # Path for robot xacro
     robot_path = os.path.join(package_share_dir, 'urdf', robot_xacro_filename)
     
-    slam_toolbox_path = os.path.join(get_package_share_directory('slam_toolbox'), 'params', 'slam_toolbox_config.yaml')
+    slam_toolbox_path = os.path.join(package_share_dir, 'params', 'slam_toolbox_config.yaml')
 
     rviz_map = os.path.join(package_share_dir, 'rviz', 'map.rviz')
     rviz_nav = os.path.join(package_share_dir, 'rviz', 'nav.rviz')

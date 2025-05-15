@@ -47,7 +47,7 @@
     lidar_pos_z:='0.035'
     lidar_pos_r:='0.0'
     lidar_pos_p:='0.0'
-    lidar_pos_w:='0.0'
+    lidar_pos_w:='3.14'
     
     update_rate:='10'
     ray_count:='360'
